@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Notes</title>
+	<style>
+        body{
+          background-color: #E9EDC9;
+          text-align: center;
+        }
+		div{
+			padding-top: 0px;
+			position: relative;
+			top: 10px;
+			background-color: #CCD5AE;
+			height: 400px;
+			width: 600px;
+			text-align: center;
+			margin-left: auto;
+			margin-right: auto;
+			border-radius: 15px;
+
+		}
+        button{
+            background-color: #E7AB9A;
+            border-radius: 10px;
+            border-style: hidden;
+			position: absolute;
+			height: 30px;
+			width: 70px;
+        }
+        button:hover{
+            background-color: #EDE9D5;
+        }
+		textarea{
+			position: relative;
+			background-color: #FEFAE0;
+			margin-top: 70px;
+			margin-bottom: 70px;
+			padding-left: 200px;
+			border-radius: 10px;
+			height: 100px;
+			width: 300px;
+			font-size: 1.5em;
+			border-style: dotted;
+		}
+		.add{
+			position: absolute;
+			top: 250px;
+			left: 200px;
+		}
+		.clear{
+			position: absolute;
+			top: 250px;
+			left: 350px;
+		}
+		.signout{
+			position: relative;
+			bottom: 50px;
+			top: 100px;
+			margin-left: auto;
+			margin-right: auto;
+			width: 150px;
+		}
+		h1{
+			padding-top: 100px;
+			padding-bottom: 0px;;
+		}
+
+    </style>
+</head>
+<body>
+	<h1>My Notes</h1>
+	<div>
+		<textarea id="note"></textarea>
+		<button onclick="addNote()" class="add">Add</button>
+		<button onclick="clearNotes()" class="clear">Clear</button>
+		<button onclick="signOut()" class="signout">Sign Out Google</button>
+	</div>
+    
+    <br>
+	<ul id="noteList"></ul>
+	<script>
+		let notes = [];
+
+function addNote() {
+	const note = document.getElementById('note').value;
+	if (note === '') {
+		alert('Please enter a note!');
+		return;
+	}
+	notes.push(note);
+	updateNoteList();
+	document.getElementById('note').value = '';
+}
+
+function clearNotes() {
+	notes = [];
+	updateNoteList();
+}
+
+function updateNoteList() {
+	const noteList = document.getElementById('noteList');
+	noteList.innerHTML = '';
+	for (let i = 0; i < notes.length; i++) {
+		const note = notes[i];
+		const li = document.createElement('li');
+		li.textContent = note;
+		noteList.appendChild(li);
+	}
+}
+
+
+window.onload = function() {
+	if (localStorage.getItem('notes') !== null) {
+		notes = JSON.parse(localStorage.getItem('notes'));
+		updateNoteList();
+	}
+}
+
+window.onbeforeunload = function() {
+	localStorage.setItem('notes', JSON.stringify(notes));}
+
+function signOut() {
+		fetch("https://oauth2.googleapis.com/revoke?token=" + info['access_token'],{
+		method:'POST',
+		headers:{
+			'Content-type':'application/x-www-form-urlencoded'
+		}})
+	    .then((data) =>{
+        location.href="Paste Your Location href"
+	    })
+
+}
+	
+</script>
+
+</body>
+</html>
